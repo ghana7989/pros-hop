@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import HomePage from "./Pages/HomePage";
 import ProductPage from "./Pages/ProductPage";
 import GlobalStyles from "./GlobalStyles";
+import CartPage from "./Pages/CartPage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Container>
           <Switch>
             <Route path="/product/:id" exact component={ProductPage} />
+            <Route exact path="/cart/:id?" component={CartPage} />
             <Route exact path="/" component={HomePage} />
           </Switch>
         </Container>
