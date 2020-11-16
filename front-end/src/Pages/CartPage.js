@@ -26,10 +26,12 @@ const CartPage = ({ match, location, history }) => {
     }
   }, [dispatch, history, productId, quantity])
   useEffect(() => {
-    setTimeout(() => {
-      history.push("/")
-    }, 5000);
-  }, [history])
+    if (location.pathname !== "/cart") {
+      setTimeout(() => {
+        history.push("/")
+      }, 5000);
+    }
+  }, [history, location])
   return (
     <Row>
       <Col md={8}>
