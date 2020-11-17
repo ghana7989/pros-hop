@@ -28,8 +28,8 @@ const CartPage = ({ match, location, history }) => {
   useEffect(() => {
     if (location.pathname !== "/cart") {
       setTimeout(() => {
-        history.push("/")
-      }, 5000);
+        history.push("/cart")
+      }, 0);
     }
   }, [history, location])
   return (
