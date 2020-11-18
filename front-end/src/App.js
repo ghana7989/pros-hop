@@ -9,6 +9,8 @@ import CartPage from "./Pages/CartPage";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import ProfilePage from "./Pages/ProfilePage";
+import ShippingPage from "./Pages/ShippingPage";
+import PaymentPage from "./Pages/PaymentMethodPage";
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
       <main className="py-3" style={{ minHeight: "80vh" }}>
         <Container>
           <Switch>
+            <Route path="/payment" exact component={PaymentPage} />
+            <Route path="/shipping" exact component={ShippingPage} />
             <Route path="/profile" exact component={ProfilePage} />
             <Route path="/register" exact component={RegisterPage} />
             <Route path="/login" exact component={LoginPage} />
