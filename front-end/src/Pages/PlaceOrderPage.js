@@ -11,7 +11,7 @@ const PlaceOrderPage = ({ history }) => {
 
   const cart = useSelector(state => state.cart)
 
-  // if (!cart.paymentMethod) history.push("/payment")
+  if (!cart.paymentMethod) history.push("/payment")
 
   cart.itemsPrice = addDecimals((cart?.cartItems?.reduce((acc, item) => acc + Number(item.price) * Number(item.qty), 0)))
 
