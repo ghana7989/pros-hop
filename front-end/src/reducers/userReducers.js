@@ -12,7 +12,8 @@ import {
   USER_UPDATE_PROFILE_RESET,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_FAIL,
-  USER_UPDATE_PROFILE_SUCCESS
+  USER_UPDATE_PROFILE_SUCCESS,
+  USER_DETAIL_RESET
 } from "../actionTypes/userActionTypes"
 
 export const userLoginReducer = (state = {}, action) => {
@@ -82,6 +83,8 @@ export const userDetailReducer = (state = { user: {} }, action) => {
         loading: false,
         error: action.payload
       }
+    case USER_DETAIL_RESET:
+      return { user: {} }
     default: return state
   }
 }
@@ -107,6 +110,8 @@ export const userUpdateProfileReducer = (state = {}, action) => {
         success: false,
         error: action.payload
       }
+    case USER_UPDATE_PROFILE_RESET:
+      return {}
     default: return state
   }
 }
