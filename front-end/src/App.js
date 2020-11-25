@@ -13,6 +13,7 @@ import ShippingPage from "./Pages/ShippingPage";
 import PlaceOrderPage from "./Pages/PlaceOrderPage";
 import PaymentPage from "./Pages/PaymentMethodPage";
 import OrderPage from "./Pages/OrderPage";
+import UserListPage from "./Pages/UserListPage";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
       <main className="py-3" style={{ minHeight: "80vh" }}>
         <Container>
           <Switch>
+            <Route path="/admin/userlist" exact component={UserListPage} />
             <Route path="/order/:id" exact component={OrderPage} />
             <Route path="/placeorder" exact component={PlaceOrderPage} />
             <Route path="/payment" exact component={PaymentPage} />
