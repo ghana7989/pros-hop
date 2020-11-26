@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { Link } from 'react-router-dom'
@@ -9,13 +9,15 @@ import Loader from '../components/Loader'
 import {
   getOrderDetails,
   payOrder,
-  // deliverOrder,
+  deliverOrder,
 } from '../actions/orderActions'
 import {
+  ORDER_DELIVER_RESET,
   ORDER_PAY_RESET,
 } from '../actionTypes/orderActionTypes.js'
 
-const OrderScreen = ({ match, history }) => {
+
+const OrderPage = ({ match, history }) => {
   const orderId = match.params.id
 
   const [sdkReady, setSdkReady] = useState(false)
@@ -28,6 +30,8 @@ const OrderScreen = ({ match, history }) => {
   const orderPay = useSelector((state) => state.orderPay)
   const { loading: loadingPay, success: successPay } = orderPay
 
+  const orderDeliver = useSelector((state) => state.orderDeliver)
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -60,9 +64,9 @@ const OrderScreen = ({ match, history }) => {
       document.body.appendChild(script)
     }
 
-    if (!order || successPay  || order._id !== orderId) {
+    if (!order || successPay || successDeliver || order._id !== orderId) {
       dispatch({ type: ORDER_PAY_RESET })
-      // dispatch({ type: ORDER_DELIVER_RESET })
+      dispatch({ type: ORDER_DELIVER_RESET })
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -71,7 +75,7 @@ const OrderScreen = ({ match, history }) => {
         setSdkReady(true)
       }
     }
-  }, [dispatch, orderId, successPay,loadingPay, order, userInfo, history])
+  }, [dispatch, orderId, successPay, successDeliver, order, userInfo, history])
 
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult)
@@ -79,7 +83,7 @@ const OrderScreen = ({ match, history }) => {
   }
 
   const deliverHandler = () => {
-    // dispatch(deliverOrder(order))
+    dispatch(deliverOrder(order))
   }
 
   return loading ? (
@@ -152,7 +156,7 @@ const OrderScreen = ({ match, history }) => {
                                 </Link>
                               </Col>
                               <Col md={4}>
-                                {item.qty} x ₹{item.price} = ₹{item.qty * item.price}
+                                {item.qty} x ${item.price} = ${item.qty * item.price}
                               </Col>
                             </Row>
                           </ListGroup.Item>
@@ -171,25 +175,25 @@ const OrderScreen = ({ match, history }) => {
                   <ListGroup.Item>
                     <Row>
                       <Col>Items</Col>
-                      <Col>₹{order.itemsPrice}</Col>
+                      <Col>${order.itemsPrice}</Col>
                     </Row>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <Row>
                       <Col>Shipping</Col>
-                      <Col>₹{order.shippingPrice}</Col>
+                      <Col>${order.shippingPrice}</Col>
                     </Row>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <Row>
                       <Col>Tax</Col>
-                      <Col>₹{order.taxPrice}</Col>
+                      <Col>${order.taxPrice}</Col>
                     </Row>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <Row>
                       <Col>Total</Col>
-                      <Col>₹{order.totalPrice}</Col>
+                      <Col>${order.totalPrice}</Col>
                     </Row>
                   </ListGroup.Item>
                   {!order.isPaid && (
@@ -205,6 +209,7 @@ const OrderScreen = ({ match, history }) => {
                         )}
                     </ListGroup.Item>
                   )}
+                  {loadingDeliver && <Loader />}
                   {userInfo &&
                     userInfo.isAdmin &&
                     order.isPaid &&
@@ -227,4 +232,4 @@ const OrderScreen = ({ match, history }) => {
       )
 }
 
-export default OrderScreen
+export default OrderPage

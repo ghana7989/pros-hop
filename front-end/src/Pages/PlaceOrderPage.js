@@ -3,6 +3,7 @@ import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { createOrder } from '../actions/orderActions'
+import { CART_RESET } from '../actionTypes/cartActionTypes'
 import CheckoutSteps from '../components/CheckoutSteps'
 import Message from "../components/Message"
 
@@ -48,6 +49,7 @@ const PlaceOrderPage = ({ history }) => {
         totalPrice: cart.totalPrice,
       })
     )
+    dispatch({ type: CART_RESET })
   }
 
   return (
