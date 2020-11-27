@@ -64,7 +64,7 @@ const LoginPage = ({ location, history }) => {
         </Button>
       </Form>
       <Row className="py-3">
-        <Col>New Customer? <Link to={redirect !== "/" ? `/register/${redirect}` : "/register"}>Register</Link></Col>
+        <Col>New Customer? <Link to={`/register?redirect=${redirect}`}>Register</Link></Col>
       </Row>
     </FormContainer>
   )
