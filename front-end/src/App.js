@@ -28,11 +28,12 @@ const App = () => {
         <Container>
           <Switch>
             <Route path="/admin/productlist" exact component={ProductListPage} />
+            <Route path="/admin/productlist/:pageNumber" exact component={ProductListPage} />
             <Route path="/admin/user/:id/edit" exact component={UserEditPage} />
             <Route path="/admin/userlist" exact component={UserListPage} />
             <Route path="/admin/product/:id/edit" exact component={ProductEditPage} />
             <Route path="/admin/orderlist" exact component={OrderListPage} />
-            
+
             <Route path="/order/:id" exact component={OrderPage} />
             <Route path="/placeorder" exact component={PlaceOrderPage} />
             <Route path="/payment" exact component={PaymentPage} />
@@ -42,6 +43,9 @@ const App = () => {
             <Route path="/login" exact component={LoginPage} />
             <Route path="/product/:id" exact component={ProductPage} />
             <Route exact path="/cart/:id?" component={CartPage} />
+            <Route exact path="/search/:keyword" component={HomePage} />
+            <Route exact path="/page/:pageNumber" component={HomePage} />
+            <Route exact path="/search/:keyword/page/:pageNumber" component={HomePage} />
             <Route exact path="/" component={HomePage} />
           </Switch>
         </Container>

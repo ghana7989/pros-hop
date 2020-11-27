@@ -26,11 +26,11 @@ import {
 
 } from "../actionTypes/productsActionTypes";
 
-export const listProducts = () => async (dispatch) => {
+export const listProducts = (keyword = "", pageNumber = "") => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST });
 
-    const { data } = await axios.get("/api/products")
+    const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
 
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data })
 
@@ -126,6 +126,51 @@ export const updateProduct = (product) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_UPDATE_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message
+    })
+  }
+}
+
+export const createProductReview = (productId, review = { rating: 0, comment: "" }) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST });
+
+    const { userLogin: { userInfo } } = getState()
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${userInfo.token}`,
+      }
+    }
+    const { data } = await axios.post(`/api/products/${productId}/reviews`, review, config)
+
+    if (!data) throw new Error("Error with posting the request")
+
+    dispatch({ type: PRODUCT_CREATE_REVIEW_SUCCESS, payload: data })
+
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_CREATE_REVIEW_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message
+    })
+  }
+}
+
+export const listTopProducts = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: PRODUCT_TOP_REQUEST });
+
+
+    const { data } = await axios.get(`/api/products/top`)
+
+    if (!data) throw new Error("Error with getting the request")
+
+    dispatch({ type: PRODUCT_TOP_SUCCESS, payload: data })
+
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_TOP_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message
     })
   }

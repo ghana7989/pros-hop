@@ -4,44 +4,58 @@ import { Col, Row } from 'react-bootstrap'
 import { listProducts } from '../actions/productActions'
 import Product from "../components/Product"
 import Loader from '../components/Loader';
+import Paginate from '../components/Paginate';
 import Message from '../components/Message';
+import ProductCarousel from '../components/ProductCarousel';
+import { Link } from 'react-router-dom';
 
-const HomePage = () => {
+const HomePage = ({ match }) => {
 
-    const dispatch = useDispatch();
+  const keyword = match.params?.keyword
+  const pageNumber = match.params?.pageNumber || 1;
 
-    const productList = useSelector(state => state.productList)
-    const { products, loading, error } = productList;
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(listProducts())
-    }, [dispatch])
+  const productList = useSelector(state => state.productList)
+  const { products, loading, error, pages, page } = productList;
 
-    return (
-        <>
-            <h1>Latest Products</h1>
-            {
-                loading ? (
-                    <Loader />
-                ) : error ? (
-                    <Message variant="danger">
-                        {error}
-                    </Message>
-                ) :
-                        (
-                            <Row>
-                                {
-                                    products?.map(product => (
-                                        <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                                            <Product product={product} />
-                                        </Col>
-                                    ))
-                                }
-                            </Row>
-                        )
-            }
-        </>
-    )
+  useEffect(() => {
+    dispatch(listProducts(keyword, pageNumber))
+  }, [dispatch, keyword, pageNumber])
+
+  if (error === "Request failed with status code 500") {
+    window.location.reload()
+  }
+
+  return (
+    <>
+      {!keyword ? <ProductCarousel /> : <Link to="/" className="btn btn-light">Go Back</Link>}
+      <h1>Latest Products</h1>
+      {
+        loading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">
+            {error}
+          </Message>
+        ) :
+            (
+              <>
+                <Row>
+                  {
+                    products?.map(product => (
+                      <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                        <Product product={product} />
+                      </Col>
+                    ))
+                  }
+                </Row>
+                <Paginate pages={pages} page={page} keyword={keyword ? keyword : ""} />
+              </>
+            )
+      }
+    </>
+  )
 }
 
 export default HomePage

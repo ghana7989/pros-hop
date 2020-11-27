@@ -1,4 +1,5 @@
 import express from 'express';
+import morgan from "morgan"
 import path from 'path';
 import { config } from 'dotenv';
 import connectDB from "./config/db.js";
@@ -17,6 +18,9 @@ connectDB()
 
 const app = express();
 
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("tiny"))
+}
 app.use(express.json())
 
 const __dirname = path.resolve()
